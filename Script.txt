@@ -1,0 +1,33 @@
+const fPath = '/private/var/mobile/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable/Documents/lastpass_export.csv';
+let pwList = FileManager.iCloud();
+let pwTest = pwList.documentsDirectory();
+let pwPath = pwList.listContents(pwTest);
+let pwDown = pwList.downloadFileFromiCloud(fPath);
+let pwGood = pwList.fileExists(fPath);
+let pwFileGood = pwList.read(fPath);
+let pwData = Data.fromFile(fPath);
+let pwRaw = pwData.toRawString();
+let pwLines = pwRaw.split("\r\n");
+let pwHeaders = pwLines.splice(0,1)[0].split(",");
+let valuesRegExp = /(?:\"([^\"]*(?:\"\"[^\"]*)*)\")|([^\",]+)/g;
+let pwElements = [];
+let pwArray = pwElements;
+
+  for (let i = 0; i < pwLines.length; i++) {
+    let element = {};
+    let j = 0;
+
+    while (matches = valuesRegExp.exec(pwLines[i])) {
+        var value = matches[1] || matches[2];
+        value = value.replace(/\"\"/g, "\"");
+
+        element[pwHeaders[j]] = value;
+        j++;
+    }
+
+    pwElements.push(element);
+}
+pwDown
+for (item of pwArray){
+  console.log(Keychain.remove(item.password))
+}
